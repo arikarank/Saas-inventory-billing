@@ -120,6 +120,12 @@ class Subscription(db.Model):
     expiry_date = db.Column(db.DateTime)
     is_active = db.Column(db.Boolean, default=True)
 
+
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
