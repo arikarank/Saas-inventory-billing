@@ -121,9 +121,10 @@ class Subscription(db.Model):
     is_active = db.Column(db.Boolean, default=True)
 
 
-@app.before_first_request
-def create_tables():
+# Make sure all tables exist (works in gunicorn / Render)
+with app.app_context():
     db.create_all()
+
 
 
 @login_manager.user_loader
