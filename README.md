@@ -246,7 +246,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 👤 Author
 
-arikaran k - [GitHub Profile](https://github.com/arikarank)
+Arikaran k - [GitHub Profile](https://github.com/arikarank)
 
 ## 🙏 Acknowledgments
 
