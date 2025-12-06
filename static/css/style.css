@@ -1,0 +1,60 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    font-weight: 600;
+}
+
+.table th {
+    font-weight: 600;
+    border-top: none;
+}
+
+.btn-group .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+/* Dashboard cards */
+.card.bg-primary, .card.bg-success, .card.bg-info, .card.bg-warning {
+    border-radius: 10px;
+}
+
+.card.bg-primary .bi, 
+.card.bg-success .bi, 
+.card.bg-info .bi, 
+.card.bg-warning .bi {
+    opacity: 0.8;
+}
+
+/* Invoice items table */
+.invoice-items th {
+    background-color: #f8f9fa;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .btn-group {
+        display: block;
+    }
+    
+    .btn-group .btn {
+        margin-bottom: 5px;
+        display: block;
+    }
+}

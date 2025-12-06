@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block title %}Welcome - Inventory & Billing System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <div class="jumbotron bg-light p-5 rounded-3 mt-5">
+            <h1 class="display-4 mb-4">Welcome to InventoryPro</h1>
+            <p class="lead mb-4">A complete SAAS Inventory Management and Billing System for Small Businesses</p>
+            
+            {% if current_user.is_authenticated %}
+                <p>You are already logged in as <strong>{{ current_user.email }}</strong></p>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg mt-3">
+                    Go to Dashboard <i class="bi bi-arrow-right"></i>
+                </a>
+            {% else %}
+                <div class="row mt-5">
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-person-plus text-primary"></i> New User</h5>
+                                <p class="card-text">Create a new account to start managing your inventory and billing.</p>
+                                <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Register Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-box-arrow-in-right text-success"></i> Existing User</h5>
+                                <p class="card-text">Already have an account? Login to access your dashboard.</p>
+                                <a href="{{ url_for('login') }}" class="btn btn-success">Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="bi bi-box-seam display-4 text-primary mb-3"></i>
+                    <h4>Inventory Management</h4>
+                    <p class="text-muted">Track stock levels, set low stock alerts, and manage products efficiently.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="bi bi-receipt display-4 text-success mb-3"></i>
+                    <h4>Billing & Invoicing</h4>
+                    <p class="text-muted">Create professional invoices, track payments, and manage customer accounts.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="bi bi-graph-up display-4 text-info mb-3"></i>
+                    <h4>Analytics Dashboard</h4>
+                    <p class="text-muted">Get insights with real-time analytics and business performance metrics.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

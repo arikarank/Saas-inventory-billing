@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">Settings</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Company Information</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_settings') }}">
+                    <div class="mb-3">
+                        <label for="company_name" class="form-label">Company Name</label>
+                        <input type="text" class="form-control" id="company_name" name="company_name" 
+                               value="{{ current_user.company_name or '' }}">
+                        <div class="form-text">This will appear on your invoices</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" value="{{ current_user.email }}" readonly>
+                        <div class="form-text">Email cannot be changed</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Account Information</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-5">Account Created:</dt>
+                    <dd class="col-sm-7">{{ current_user.created_at.strftime('%Y-%m-%d') }}</dd>
+                    
+                    <dt class="col-sm-5">Subscription Plan:</dt>
+                    <dd class="col-sm-7">
+                        {% if current_user.subscriptions %}
+                            {% set subscription = current_user.subscriptions[0] %}
+                            <span class="badge bg-{{ 'success' if subscription.plan_type == 'premium' else 'primary' if subscription.plan_type == 'basic' else 'secondary' }}">
+                                {{ subscription.plan_type|title }}
+                            </span>
+                        {% else %}
+                            <span class="badge bg-secondary">Free</span>
+                        {% endif %}
+                    </dd>
+                    
+                    <dt class="col-sm-5">Total Products:</dt>
+                    <dd class="col-sm-7">{{ current_user.products|length }}</dd>
+                    
+                    <dt class="col-sm-5">Total Customers:</dt>
+                    <dd class="col-sm-7">{{ current_user.customers|length }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

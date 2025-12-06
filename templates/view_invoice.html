@@ -1,0 +1,142 @@
+{% extends "layout.html" %}
+
+{% block title %}Invoice {{ invoice.invoice_number }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Invoice {{ invoice.invoice_number }}</h1>
+            <div>
+                <a href="{{ url_for('download_invoice_pdf', id=invoice.id) }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-download"></i> Download PDF
+                </a>
+                <a href="{{ url_for('invoices') }}" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Invoice Header -->
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <h4>{{ current_user.company_name or 'Your Company' }}</h4>
+                        <p class="mb-0">SAAS Inventory & Billing System</p>
+                        <p class="mb-0">Email: {{ current_user.email }}</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <h4>INVOICE</h4>
+                        <p class="mb-0"><strong>Invoice #:</strong> {{ invoice.invoice_number }}</p>
+                        <p class="mb-0"><strong>Date:</strong> {{ invoice.invoice_date.strftime('%B %d, %Y') }}</p>
+                        {% if invoice.due_date %}
+                        <p class="mb-0"><strong>Due Date:</strong> {{ invoice.due_date.strftime('%B %d, %Y') }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Bill To -->
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <h5>Bill To:</h5>
+                        <p class="mb-0"><strong>{{ invoice.customer.name }}</strong></p>
+                        {% if invoice.customer.customer_code %}
+                        <p class="mb-0">Customer Code: {{ invoice.customer.customer_code }}</p>
+                        {% endif %}
+                        {% if invoice.customer.email %}
+                        <p class="mb-0">Email: {{ invoice.customer.email }}</p>
+                        {% endif %}
+                        {% if invoice.customer.phone %}
+                        <p class="mb-0">Phone: {{ invoice.customer.phone }}</p>
+                        {% endif %}
+                        {% if invoice.customer.address %}
+                        <p class="mb-0">Address: {{ invoice.customer.address }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <h5>Status:</h5>
+                        <span class="badge bg-{{ 
+                            'success' if invoice.status == 'paid' 
+                            else 'danger' if invoice.status == 'cancelled' 
+                            else 'warning' 
+                        }} fs-6">
+                            {{ invoice.status|title }}
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Invoice Items -->
+                <div class="table-responsive mb-5">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Description</th>
+                                <th class="text-end">Quantity</th>
+                                <th class="text-end">Unit Price</th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in invoice.items %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ item.description }}</td>
+                                <td class="text-end">{{ item.quantity }}</td>
+                                <td class="text-end">${{ "%.2f"|format(item.unit_price) }}</td>
+                                <td class="text-end">${{ "%.2f"|format(item.total_price) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Subtotal:</strong></td>
+                                <td class="text-end">${{ "%.2f"|format(invoice.total_amount + invoice.discount_amount - invoice.tax_amount) }}</td>
+                            </tr>
+                            {% if invoice.tax_amount > 0 %}
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Tax:</strong></td>
+                                <td class="text-end">${{ "%.2f"|format(invoice.tax_amount) }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if invoice.discount_amount > 0 %}
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Discount:</strong></td>
+                                <td class="text-end">-${{ "%.2f"|format(invoice.discount_amount) }}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td colspan="4" class="text-end"><strong>Total Amount:</strong></td>
+                                <td class="text-end"><strong>${{ "%.2f"|format(invoice.total_amount) }}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                
+                <!-- Notes -->
+                {% if invoice.notes %}
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h5>Notes:</h5>
+                        <p>{{ invoice.notes }}</p>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Payment Instructions -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-info">
+                            <h6>Payment Instructions:</h6>
+                            <p class="mb-0">Please make payment within 30 days. Bank details available on request.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
